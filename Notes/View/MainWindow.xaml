@@ -13,7 +13,7 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <ListBox Grid.Column="0" ItemsSource="{Binding Notes}" SelectedItem="{Binding SelectedNote}">
+        <ListBox Margin="10,40,0,10" Grid.Column="0" ItemsSource="{Binding Notes}" SelectedItem="{Binding SelectedNote}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -33,7 +33,12 @@
             <TextBlock Grid.Row="0" Margin="10,45,300,465" Text="{Binding CreationDate}"></TextBlock>
             <TextBox Grid.Row="0" Margin="10,75,10,10" Text="{Binding Note}"></TextBox>
         </Grid>
+        
         <Button Margin="10,480,150,10" Command="{Binding AddCommand}"></Button>
         <Button Grid.Column="2" Margin="150,480,10,10" Command="{Binding RemoveCommand}"></Button>
+        <Button Grid.Column="0" Margin="190,520,10,10" Click="AlphabetSortButtonClick" ></Button>
+        <Button Grid.Column="0" Margin="145,520,55,10" Click="DateSortButtonClick" ></Button>
+
+        <TextBox Margin="10,10,0,530" FontSize="15"></TextBox>
     </Grid>
 </Window>

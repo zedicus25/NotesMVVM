@@ -21,7 +21,7 @@ namespace Notes.Model
             set { _name = value; OnPropertyChanged("Name"); }
         }
 
-        public string CreationDate
+        public DateTime CreationDate
         {
             get { return _creationDate; }
             private set { _creationDate = value; OnPropertyChanged("CreationDate"); }
@@ -30,7 +30,7 @@ namespace Notes.Model
 
         private string _note;
         private string _name;
-        private string _creationDate;
+        private DateTime _creationDate;
 
         public Note_Model() : this(String.Empty, String.Empty)
         {
@@ -39,11 +39,11 @@ namespace Notes.Model
         {
             _name = name;
             _note = content;
-            _creationDate = DateTime.Now.ToShortDateString();
+            _creationDate = DateTime.Now;
         }
         public Note_Model(string name, string note, string dateCreation) : this(name, note)
         {
-            _creationDate = dateCreation; 
+            _creationDate = DateTime.Parse(dateCreation);
         } 
         public Note_Model(Note_Model note) : this(note.Name, note.Note)
         {
@@ -56,14 +56,14 @@ namespace Notes.Model
 
         public override string ToString()
         {
-            return String.Format("{0} \n {1} ", _name, _creationDate);
+            return String.Format("{0} \n {1} ", _name, _creationDate.ToShortDateString());
         }
 
         public string ToStringForFile()
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(_name);
-            sb.AppendLine(_creationDate);
+            sb.AppendLine(_creationDate.ToString());
             sb.AppendLine(_note);
             sb.Append(new String('-',25));
             return sb.ToString();

@@ -12,7 +12,11 @@ namespace Notes.ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ObservableCollection<Note_Model> Notes { get; set; }
+        public ObservableCollection<Note_Model> Notes 
+        { 
+            get { return _notes; }
+            set { _notes = value; OnPropertyChanged("Notes"); }
+        }
         public Note_Model SelectedNote
         {
             get { return _selectedNote; }
@@ -23,11 +27,10 @@ namespace Notes.ViewModel
         {
             get
             {
-                
                 return _addCommand ?? (_addCommand = new RelayCommand(() =>
                 {
                     Note_Model note = new Note_Model("New note", String.Empty);
-                    Notes.Add(note);
+                    _notes.Add(note);
                 }));
             }
             set
@@ -41,9 +44,9 @@ namespace Notes.ViewModel
             {
                 return _removeCommand ?? (_removeCommand = new RelayCommand(() =>
                 {
-                    if(Notes.Contains(SelectedNote) && SelectedNote != null)
+                    if(_notes.Contains(SelectedNote) && SelectedNote != null)
                     {
-                        Notes.Remove(SelectedNote);
+                        _notes.Remove(SelectedNote);
                     }
                 }));
             }
@@ -57,11 +60,16 @@ namespace Notes.ViewModel
         private RelayCommand _addCommand;
         private RelayCommand _removeCommand;
         private WriteReadController _writeReadController;
+        private SortController _sortController;
+        private ObservableCollection<Note_Model> _notes;
+        private event Action AlphabetSortEvent;
+        private event Action DateSortEvent;
 
         public MainWindow_ViewModel()
         {
             _writeReadController = new WriteReadController();
-            Notes = new ObservableCollection<Note_Model>(_writeReadController.ReadFromFile());
+            _sortController = new SortController();
+            _notes = new ObservableCollection<Note_Model>(_writeReadController.ReadFromFile());
         }
 
         public void OnPropertyChanged([CallerMemberName] string prop = "")
@@ -69,9 +77,43 @@ namespace Notes.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
-        public void SaveToFile()
+        public void SaveToFile() => _writeReadController.WriteToFile(_notes);
+
+        public void AlphabetSort(int countClick)
         {
-            _writeReadController.WriteToFile(Notes);
+            DateSortEvent = null;
+            switch (countClick)
+            {
+                case 0:
+                    DateSortEvent += SortByAcendingDate;
+                    break;
+                case 1:
+                    DateSortEvent += SortByDescendingDate;
+                    break;
+            }
+            DateSortEvent?.Invoke();
         }
+
+        public void DateSort(int countClick)
+        {
+            AlphabetSortEvent = null;
+            switch (countClick)
+            {
+                case 0:
+                    AlphabetSortEvent += SortByAlphabetOrder;
+                    break;
+                case 1:
+                    AlphabetSortEvent += SortByInverseAlphabetOrder;
+                    break;
+            }
+            AlphabetSortEvent?.Invoke();
+        }
+        private void SortByAlphabetOrder() => _sortController.SortByAlphabetOrder(ref _notes);
+
+        private void SortByInverseAlphabetOrder() => _sortController.SortByInverseAlphabetOrder(ref _notes);
+
+        private void SortByAcendingDate() => _sortController.SortByAscendingDate(ref _notes);
+
+        private void SortByDescendingDate() => _sortController.SortByDescendingDate(ref _notes);
     }
 }
