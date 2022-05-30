@@ -18,7 +18,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
-                        <TextBlock FontSize="15" Text="{Binding Name}" TextWrapping="WrapWithOverflow"></TextBlock>
+                        <TextBlock FontSize="15" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow"></TextBlock>
                         <TextBlock FontSize="13" Margin="0,20,0,0"  Text="{Binding CreationDate}"></TextBlock>
                     </StackPanel>
                 </DataTemplate>
