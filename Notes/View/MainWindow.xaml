@@ -13,7 +13,7 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <ListBox Margin="10,40,0,10" Grid.Column="0" ItemsSource="{Binding Notes}" SelectedItem="{Binding SelectedNote}">
+        <ListBox Margin="10,85,0,10" Grid.Column="0" ItemsSource="{Binding Notes}" SelectedItem="{Binding SelectedNote}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -29,16 +29,17 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <TextBox FontSize="18" Grid.Row="0" Margin="10,10,10,500" Text="{Binding Name}"></TextBox>
-            <TextBlock Grid.Row="0" Margin="10,45,300,465" Text="{Binding CreationDate}"></TextBlock>
-            <TextBox Grid.Row="0" Margin="10,75,10,10" Text="{Binding Note}"></TextBox>
+            <TextBox FontSize="18" Grid.Row="0" Margin="10,10,10,500" Text="{Binding Name}" VerticalContentAlignment="Center"></TextBox>
+            <TextBlock Grid.Row="0" Margin="10,60,300,455" Text="{Binding CreationDate}"></TextBlock>
+            <TextBox Grid.Row="0" Margin="10,90,10,10" Text="{Binding Note}" TextWrapping="Wrap"></TextBox>
         </Grid>
-        
-        <Button Margin="10,480,150,10" Command="{Binding AddCommand}"></Button>
-        <Button Grid.Column="2" Margin="150,480,10,10" Command="{Binding RemoveCommand}"></Button>
-        <Button Grid.Column="0" Margin="190,520,10,10" Click="AlphabetSortButtonClick" ></Button>
-        <Button Grid.Column="0" Margin="145,520,55,10" Click="DateSortButtonClick" ></Button>
 
-        <TextBox Margin="10,10,0,530" FontSize="15"></TextBox>
+        <Button Margin="20,460,140,30" Command="{Binding AddCommand}"></Button>
+        <Button Grid.Column="2" Margin="135,460,25,30" Command="{Binding RemoveCommand}"></Button>
+        <Button Grid.Column="0" Margin="140,40,60,490" Click="AlphabetSortButtonClick" ></Button>
+        <Button Grid.Column="0" Margin="190,40,10,490" Click="DateSortButtonClick" ></Button>
+
+        <TextBox Margin="10,10,0,530" FontSize="15" TextChanged="FindTextBoxEvent" Name="FindTB"></TextBox>
+        <CheckBox Content="Right GO" Margin="10,40,130,500" Name="rightCB" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"></CheckBox>
     </Grid>
 </Window>

@@ -2,6 +2,7 @@
 using Notes.Controller;
 using Notes.Model;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -70,6 +71,13 @@ namespace Notes.ViewModel
             _writeReadController = new WriteReadController();
             _sortController = new SortController();
             _notes = new ObservableCollection<Note_Model>(_writeReadController.ReadFromFile());
+        }
+
+        public MainWindow_ViewModel(List<Note_Model> notes)
+        {
+            _writeReadController = new WriteReadController();
+            _sortController = new SortController();
+            _notes = new ObservableCollection<Note_Model>(notes);
         }
 
         public void OnPropertyChanged([CallerMemberName] string prop = "")

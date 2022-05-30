@@ -1,5 +1,7 @@
 ﻿using Notes.ViewModel;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Notes.View
 {
@@ -34,6 +36,28 @@ namespace Notes.View
             _viewModel.DateSort(_dateClick);
             _dateClick++;
             _dateClick = _dateClick % 2 == 0 ? 0 : _dateClick;
+        }
+
+        private void FindTextBoxEvent(object sender, TextChangedEventArgs e)
+        {
+            if(FindTB.Text == string.Empty)
+            {
+                DataContext = _viewModel;
+            }
+            else 
+            {
+                if (rightCB.IsPressed)
+                {
+                    DataContext = new MainWindow_ViewModel(_viewModel.Notes.Where(
+                    n => n.Name.ToLower().Equals(FindTB.Text.ToLower())).ToList());
+                }
+                else
+                {
+                    DataContext = new MainWindow_ViewModel(_viewModel.Notes.Where(
+                    n => n.Name.ToLower().Contains(FindTB.Text.ToLower())).ToList());
+                }
+                
+            }
         }
     }
 }
