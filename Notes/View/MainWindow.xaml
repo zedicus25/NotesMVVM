@@ -3,13 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Notes" 
+        xmlns:local="clr-namespace:Notes" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Notes" Height="600" Width="700"
-        MaxHeight="600" MaxWidth="700" MinHeight="600" MinWidth="700" ResizeMode="NoResize">
-    <Window.Resources>
-        <ResourceDictionary Source="NotesStyles.xaml"></ResourceDictionary>
-    </Window.Resources>
+        MaxHeight="600" MaxWidth="700" MinHeight="600" MinWidth="700" ResizeMode="NoResize"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -17,13 +16,15 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <ListBox Margin="10,85,0,10" Grid.Column="0" ItemsSource="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedNote}">
+        <ListBox Margin="10,110,0,80" Grid.Column="0" ItemsSource="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedNote}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
-                        <TextBlock FontSize="15" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow"></TextBlock>
-                        <TextBlock FontSize="13" Margin="0,20,0,0"  Text="{Binding CreationDate}"></TextBlock>
-                    </StackPanel>
+                    <GroupBox Header="{Binding Name}" Style="{StaticResource MaterialDesignGroupBox}"
+                              Margin="15,3"
+                              materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="0">
+                        <TextBlock
+                            Margin="6,6,6,6" TextWrapping="Wrap" Text="{Binding CreationDate}" />
+                    </GroupBox>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -32,31 +33,42 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <TextBox FontSize="18" Grid.Row="0" Margin="10,10,10,500" Text="{Binding Name}" VerticalContentAlignment="Center"/>
+            <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" FontSize="18" 
+                     Grid.Row="0" Margin="5,0,5,500" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                     VerticalContentAlignment="Center"/>
             <TextBlock Grid.Row="0" Margin="10,60,300,455" Text="{Binding CreationDate}"></TextBlock>
-            <TextBox Grid.Row="0" Margin="10,90,10,10" Text="{Binding Note}" TextWrapping="Wrap" FontSize="13"></TextBox>
+            <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" Grid.Row="0" Margin="5,90,5,5" 
+                     Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}" 
+                     TextWrapping="Wrap" FontSize="13"></TextBox>
         </Grid>
 
-        <Button Margin="20,435,110,15" Command="{Binding AddCommand}" MaxWidth="100" 
-                MaxHeight="100" MinWidth="90" MinHeight="90" BorderBrush="Transparent" 
-                Background="#FFDEDEDE" Content="Add" FontSize="20" FontWeight="Bold" Name="AddBtn"></Button>
+        <Button Margin="15,480,150,40" Command="{Binding AddCommand}" 
+                Style="{StaticResource MaterialDesignRaisedDarkButton}" 
+                ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
+                Content="Add"/>
 
-        <Button Grid.Column="2" Margin="100,435,20,15" Command="{Binding RemoveCommand}" MinWidth="90" 
-                MinHeight="90" MaxWidth="100" MaxHeight="100" BorderBrush="Transparent"
-                Content="Remove" FontSize="20" Background="#FFDEDEDE" FontWeight="Bold" Name="DeleteBtn"></Button>
+        <Button Margin="80,480,50,40" Command="{Binding RemoveCommand}" 
+                Style="{StaticResource MaterialDesignRaisedDarkButton}" 
+                ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
+                Content="Remove"/>
 
-        <Button Style="{x:Null}" Grid.Column="0" Margin="120,35,70,485" Command="{Binding AlphabetSortCommand}"
-                MinWidth="30" MinHeight="30" MaxWidth="40" MaxHeight="40" Background="#FFDEDEDE" 
-                BorderBrush="Transparent" Content="|AZ|" FontSize="18"></Button>
+        <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Grid.Column="0" Margin="120,50,55,470" 
+                Command="{Binding AlphabetSortCommand}" FontSize="12">
+            <materialDesign:PackIcon Kind="SortAlphabeticalVariant" />
+        </Button>
 
-        <Button Style="{x:Null}" Grid.Column="0" Margin="170,35,15,485" Command="{Binding DateSortCommand}" MinWidth="30" MinHeight="30" 
-                MaxWidth="40" MaxHeight="40" Background="#FFDEDEDE" 
-                BorderBrush="Transparent" Content="|19|" FontSize="18"></Button>
+        <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Grid.Column="0" Margin="179,50,0,470"
+                Command="{Binding DateSortCommand}" FontSize="12">
+            <materialDesign:PackIcon Kind="CalendarRange" />
+        </Button>
 
-        <TextBox Margin="10,10,0,530" FontSize="15" x:Name="FindTB" Text="{Binding FindingText, UpdateSourceTrigger=PropertyChanged}"
-                 VerticalAlignment="Center" GotFocus="FindTextBox_GotFocus" LostFocus="FindTB_LostFocus"></TextBox>
+        <TextBox Style="{StaticResource MaterialDesignFilledTextBox}" Margin="5,5,5,15" FontSize="13" 
+                 x:Name="FindTB" Text="{Binding FindingText, UpdateSourceTrigger=PropertyChanged}"
+                 VerticalAlignment="Top" GotFocus="FindTextBox_GotFocus" LostFocus="FindTB_LostFocus"></TextBox>
 
-        <CheckBox Content="Right GO" Margin="10,40,130,500" IsChecked="{Binding RightGo, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" 
-                  HorizontalContentAlignment="Left" FontSize="15"></CheckBox>
+        <CheckBox Style="{StaticResource MaterialDesignCheckBox}" Content="Right Go" Margin="10,58,130,482" 
+                  IsChecked="{Binding RightGo, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" 
+                  HorizontalContentAlignment="Left"  FontSize="15"></CheckBox>
+
     </Grid>
 </Window>
