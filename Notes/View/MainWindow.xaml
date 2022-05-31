@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Notes.View" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="700" Closed="SaveToFile"
-        MaxHeight="600" MaxWidth="700" MinHeight="600" MinWidth="700">
+        Title="Notes" Height="600" Width="700"
+        MaxHeight="600" MaxWidth="700" MinHeight="600" MinWidth="700" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -41,11 +41,12 @@
         <Button Grid.Column="2" Margin="100,435,20,15" Command="{Binding RemoveCommand}" MinWidth="90" 
                 MinHeight="90" MaxWidth="100" MaxHeight="100" BorderBrush="Transparent"
                 Content="Remove" FontSize="20" Background="#FFDEDEDE" FontWeight="Bold" Name="DeleteBtn"></Button>
-        
-        <Button Grid.Column="0" Margin="120,35,70,485" Click="AlphabetSortButtonClick" 
+
+        <Button Grid.Column="0" Margin="120,35,70,485" Command="{Binding AlphabetSortCommand}"
                 MinWidth="30" MinHeight="30" MaxWidth="40" MaxHeight="40" Background="#FFDEDEDE" 
                 BorderBrush="Transparent" Content="|AZ|" FontSize="18"></Button>
-        <Button Grid.Column="0" Margin="170,35,15,485" Click="DateSortButtonClick" MinWidth="30" MinHeight="30" 
+        
+        <Button Grid.Column="0" Margin="170,35,15,485" Command="{Binding DateSortCommand}" MinWidth="30" MinHeight="30" 
                 MaxWidth="40" MaxHeight="40" Background="#FFDEDEDE" 
                 BorderBrush="Transparent" Content="|19|" FontSize="18"></Button>
 
