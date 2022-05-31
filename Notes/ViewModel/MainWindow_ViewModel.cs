@@ -2,7 +2,6 @@
 using Notes.Controller;
 using Notes.Model;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -24,6 +23,19 @@ namespace Notes.ViewModel
             get { return _selectedNote; }
             set { _selectedNote = value; OnPropertyChanged("SelectedNote"); }
         }
+
+        public string FindingText
+        {
+            get { return _findingText; }
+            set { _findingText = value;  Search(); }
+        }
+
+        public bool RightGo
+        {
+            get { return _rightGo; }
+            set { _rightGo = value; }
+        }
+
 
         public RelayCommand AddCommand
         {
@@ -82,34 +94,32 @@ namespace Notes.ViewModel
             }
             set { _dateSortCommand = value; }
         }
-
+       
 
         private RelayCommand _addCommand;
         private RelayCommand _removeCommand;
         private RelayCommand _alphabetSortCommand;
         private RelayCommand _dateSortCommand;
 
-        private Note_Model _selectedNote;
         private WriteReadController _writeReadController;
         private SortController _sortController;
+        private FindController _findController;
+
+        private Note_Model _selectedNote;
         private ObservableCollection<Note_Model> _notes;
         private event Action AlphabetSortEvent;
         private event Action DateSortEvent;
         private bool _alphabetAcendingSort = true;
         private bool _dateAcendingSort = true;
+        private string _findingText = "Find your note";
+        private bool _rightGo = false;
 
         public MainWindow_ViewModel()
         {
             _writeReadController = new WriteReadController();
             _sortController = new SortController();
+            _findController = new FindController();
             _notes = new ObservableCollection<Note_Model>(_writeReadController.ReadFromFile());
-        }
-
-        public MainWindow_ViewModel(List<Note_Model> notes)
-        {
-            _writeReadController = new WriteReadController();
-            _sortController = new SortController();
-            _notes = new ObservableCollection<Note_Model>(notes);
         }
 
         public void OnPropertyChanged([CallerMemberName] string prop = "")
@@ -137,6 +147,24 @@ namespace Notes.ViewModel
                 DateSortEvent += SortByDescendingDate;
             DateSortEvent?.Invoke();
             _dateAcendingSort = !_dateAcendingSort;
+        }
+
+        private void Search()
+        {
+            if (_findingText.Equals("Find your note"))
+            {
+                var tmp = _writeReadController.ReadFromFile().ToList();
+                _notes.Clear();
+                foreach (var item in tmp)
+                    _notes.Add(item);
+            }
+            else
+            {
+                if (_rightGo)
+                    _findController.FindRightGo(ref _notes, _findingText);
+                else
+                    _findController.Find(ref _notes, _findingText);
+            }
         }
         private void SortByAlphabetOrder() => _sortController.SortByAlphabetOrder(ref _notes);
 

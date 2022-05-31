@@ -3,10 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Notes.View" 
+        xmlns:local="clr-namespace:Notes" 
         mc:Ignorable="d"
         Title="Notes" Height="600" Width="700"
         MaxHeight="600" MaxWidth="700" MinHeight="600" MinWidth="700" ResizeMode="NoResize">
+    <Window.Resources>
+        <ResourceDictionary Source="NotesStyles.xaml"></ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -14,7 +17,7 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <ListBox Margin="10,85,0,10" Grid.Column="0" ItemsSource="{Binding Notes}" SelectedItem="{Binding SelectedNote}">
+        <ListBox Margin="10,85,0,10" Grid.Column="0" ItemsSource="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedNote}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
@@ -37,23 +40,23 @@
         <Button Margin="20,435,110,15" Command="{Binding AddCommand}" MaxWidth="100" 
                 MaxHeight="100" MinWidth="90" MinHeight="90" BorderBrush="Transparent" 
                 Background="#FFDEDEDE" Content="Add" FontSize="20" FontWeight="Bold" Name="AddBtn"></Button>
-        
+
         <Button Grid.Column="2" Margin="100,435,20,15" Command="{Binding RemoveCommand}" MinWidth="90" 
                 MinHeight="90" MaxWidth="100" MaxHeight="100" BorderBrush="Transparent"
                 Content="Remove" FontSize="20" Background="#FFDEDEDE" FontWeight="Bold" Name="DeleteBtn"></Button>
 
-        <Button Grid.Column="0" Margin="120,35,70,485" Command="{Binding AlphabetSortCommand}"
+        <Button Style="{x:Null}" Grid.Column="0" Margin="120,35,70,485" Command="{Binding AlphabetSortCommand}"
                 MinWidth="30" MinHeight="30" MaxWidth="40" MaxHeight="40" Background="#FFDEDEDE" 
                 BorderBrush="Transparent" Content="|AZ|" FontSize="18"></Button>
-        
-        <Button Grid.Column="0" Margin="170,35,15,485" Command="{Binding DateSortCommand}" MinWidth="30" MinHeight="30" 
+
+        <Button Style="{x:Null}" Grid.Column="0" Margin="170,35,15,485" Command="{Binding DateSortCommand}" MinWidth="30" MinHeight="30" 
                 MaxWidth="40" MaxHeight="40" Background="#FFDEDEDE" 
                 BorderBrush="Transparent" Content="|19|" FontSize="18"></Button>
 
-        <TextBox Margin="10,10,0,530" FontSize="15" TextChanged="FindTextBoxEvent" Name="FindTB" 
-                 VerticalAlignment="Center" Text="Find your note" GotFocus="FindTB_GotFocus" 
-                 LostFocus="FindTB_LostFocus"></TextBox>
-        <CheckBox Content="Right GO" Margin="10,40,130,500" Name="rightCB" VerticalContentAlignment="Center" 
+        <TextBox Margin="10,10,0,530" FontSize="15" x:Name="FindTB" Text="{Binding FindingText, UpdateSourceTrigger=PropertyChanged}"
+                 VerticalAlignment="Center" GotFocus="FindTextBox_GotFocus" LostFocus="FindTB_LostFocus"></TextBox>
+
+        <CheckBox Content="Right GO" Margin="10,40,130,500" IsChecked="{Binding RightGo, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" 
                   HorizontalContentAlignment="Left" FontSize="15"></CheckBox>
     </Grid>
 </Window>
