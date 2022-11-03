@@ -32,6 +32,9 @@ namespace Notes.Model
         private string _name;
         private DateTime _creationDate;
 
+        public int Id { get; private set; }
+
+
         public Note_Model() : this(String.Empty, String.Empty)
         {
         }
@@ -44,7 +47,12 @@ namespace Notes.Model
         public Note_Model(string name, string note, string dateCreation) : this(name, note)
         {
             _creationDate = DateTime.Parse(dateCreation);
-        } 
+        }
+        public Note_Model(int id,string name, string note, DateTime dateCreation) :this(name, note)
+        {
+            _creationDate = dateCreation;
+            Id = id;
+        }
         public Note_Model(Note_Model note) : this(note.Name, note.Note)
         {
         }

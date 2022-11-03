@@ -41,7 +41,7 @@
                      Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}" 
                      TextWrapping="Wrap" FontSize="13"></TextBox>
         </Grid>
-
+        
         <Button Margin="15,480,150,40" Command="{Binding AddCommand}" 
                 Style="{StaticResource MaterialDesignRaisedDarkButton}" 
                 ToolTip="Resource name: MaterialDesignRaisedLightDarkButton"
@@ -69,6 +69,6 @@
         <CheckBox Style="{StaticResource MaterialDesignCheckBox}" Content="Right Go" Margin="10,58,130,482" 
                   IsChecked="{Binding RightGo, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" 
                   HorizontalContentAlignment="Left"  FontSize="15"></CheckBox>
-
+        <TextBlock Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Margin="10" Foreground="Red" Grid.Column="2" VerticalAlignment="Bottom"></TextBlock>
     </Grid>
 </Window>

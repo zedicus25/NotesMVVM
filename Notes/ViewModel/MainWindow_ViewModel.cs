@@ -36,6 +36,19 @@ namespace Notes.ViewModel
             set { _rightGo = value; }
         }
 
+        private string _message;
+
+        public string Message
+        {
+            get { return _message; }
+            set 
+            { 
+                _message = value;
+                OnPropertyChanged("Message");
+            }
+        }
+
+
 
         public RelayCommand AddCommand
         {
@@ -101,7 +114,8 @@ namespace Notes.ViewModel
         private RelayCommand _alphabetSortCommand;
         private RelayCommand _dateSortCommand;
 
-        private WriteReadController _writeReadController;
+        //private WriteReadController _writeReadController;
+        private DatabaseController _databaseController;
         private SortController _sortController;
         private FindController _findController;
 
@@ -116,11 +130,16 @@ namespace Notes.ViewModel
 
         public MainWindow_ViewModel()
         {
-            _writeReadController = new WriteReadController();
+            _databaseController = new DatabaseController();
+            _databaseController.SendMessage += SetMessage;
+            _databaseController.StartServer();
+            //_writeReadController = new WriteReadController();
             _sortController = new SortController();
             _findController = new FindController();
-            _notes = new ObservableCollection<Note_Model>(_writeReadController.ReadFromFile());
+            _notes = new ObservableCollection<Note_Model>(_databaseController.GetNotes());
         }
+
+        private void SetMessage(string msg) => Message = msg;
 
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
@@ -153,10 +172,10 @@ namespace Notes.ViewModel
         {
             if (_findingText.Equals("Find your note"))
             {
-                var tmp = _writeReadController.ReadFromFile().ToList();
+                /*var tmp = _writeReadController.ReadFromFile().ToList();
                 _notes.Clear();
                 foreach (var item in tmp)
-                    _notes.Add(item);
+                    _notes.Add(item);*/
             }
             else
             {
@@ -176,7 +195,7 @@ namespace Notes.ViewModel
 
         ~MainWindow_ViewModel()
         {
-            _writeReadController.WriteToFile(_notes);
+            
         }
     }
 }
