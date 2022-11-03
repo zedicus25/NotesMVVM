@@ -2,11 +2,14 @@
 using Notes.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Xml.Linq;
 
 namespace Notes.Controller
 {
@@ -15,6 +18,7 @@ namespace Notes.Controller
         public  event Action<string> SendMessage;
         public  event Action<bool> ConnectionResult;
         private ConnectionPath _connectionPath;
+        private int _countFromDb;
         public DatabaseController(string configFile = "config.json")
         {
             _connectionPath = CreataConncetionPath(configFile);
@@ -59,6 +63,34 @@ namespace Notes.Controller
             }
         }
 
+
+
+        public void InsertDataToDB(List<Note_Model> notes)
+        {
+            notes.RemoveRange(0, _countFromDb);
+            foreach (var item in notes)
+            {
+                Insert(item.Name, item.CreationDate, item.Note);
+            }
+        }
+
+        public void Insert(string name, DateTime creationDate, string description)
+        {
+            using(SqlConnection conn = GetSqlConnection())
+            {
+                conn.Open();
+                string date = creationDate.ToString("yyyy-MM-dd HH:mm:ss");
+                using (SqlCommand command = new SqlCommand($"INSERT INTO Notes([title],[creationDate],[description]) VALUES('{name}','{date}','{description}');", conn))
+                {
+                    if (command.ExecuteNonQuery() > 0)
+                        SendMessage?.Invoke("Added");
+                    else
+                        SendMessage?.Invoke("not added");
+                }
+            }
+        }
+
+
         public List<Note_Model> GetNotes()
         {
             List<Note_Model> notes = new List<Note_Model>();
@@ -66,7 +98,7 @@ namespace Notes.Controller
             {
                 conn.Open();
                 string commStr = $"SELECT * FROM [Notes];";
-                using (SqlCommand command = new SqlCommand(commStr, conn))
+                using (SqlCommand command = GetSqlCommand(conn, commStr))
                 {
                     try
                     {
@@ -78,6 +110,7 @@ namespace Notes.Controller
                             DateTime date = DateTime.Parse(sqlData.GetValue(2).ToString());
                             string note = sqlData.GetValue(3).ToString();
                             notes.Add(new Note_Model(id, name, note, date));
+                            _countFromDb++;
                         }
                     }
                     catch (Exception ex)

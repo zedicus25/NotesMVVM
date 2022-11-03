@@ -25,5 +25,10 @@ namespace Notes.View
             if (FindTB.Text.Equals(string.Empty))
                 FindTB.Text = "Find your note";
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            (this.DataContext as MainWindow_ViewModel).SaveData();
+        }
     }
 }

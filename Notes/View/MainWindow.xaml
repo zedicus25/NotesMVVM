@@ -8,7 +8,7 @@
         Title="Notes" Height="600" Width="700"
         MaxHeight="600" MaxWidth="700" MinHeight="600" MinWidth="700" ResizeMode="NoResize"
         Background="{DynamicResource MaterialDesignPaper}"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}">
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>

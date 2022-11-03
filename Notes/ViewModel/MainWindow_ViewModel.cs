@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Newtonsoft.Json.Bson;
 using Notes.Controller;
 using Notes.Model;
 using System;
@@ -193,9 +194,11 @@ namespace Notes.ViewModel
 
         private void SortByDescendingDate() => _sortController.SortByDescendingDate(ref _notes);
 
-        ~MainWindow_ViewModel()
+        public void SaveData()
         {
-            
+            _databaseController.InsertDataToDB(_notes.ToList());
         }
+
+     
     }
 }
