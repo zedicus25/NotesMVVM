@@ -9,16 +9,25 @@ namespace Notes.Model
     public class Note_Model : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public event Action<Note_Model> NoteChanged;
         public string Note
         {
             get { return _note; }
-            set { _note = value;  OnPropertyChanged("Note"); }
+            set { 
+                _note = value;  
+                OnPropertyChanged("Note");
+                NoteChanged?.Invoke(this);
+            }
         }
 
         public string Name
         {
             get { return _name; }
-            set { _name = value; OnPropertyChanged("Name"); }
+            set { 
+                _name = value; 
+                OnPropertyChanged("Name");
+                NoteChanged?.Invoke(this);
+            }
         }
 
         public DateTime CreationDate

@@ -25,7 +25,13 @@ namespace Notes.Controller
        
         public void UpdateNote(Note_Model note)
         {
-
+            using (SqlCommand command = new SqlCommand($"UPDATE [Notes] SET [title]='{note.Name}',[description]='{note.Note}' WHERE  [id] = {note.Id};", SqlConnectionSingleton.GetInstance()))
+            {
+                if (command.ExecuteNonQuery() > 0)
+                    SendMessage?.Invoke("Added");
+                else
+                    SendMessage?.Invoke("not added");
+            }
         }
 
         public void InsertDataToDB(List<Note_Model> notes)

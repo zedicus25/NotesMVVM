@@ -58,7 +58,7 @@ namespace Notes.ViewModel
                 return _addCommand ?? (_addCommand = new RelayCommand(() =>
                 {
                     Note_Model note = new Note_Model("New note", String.Empty);
-                    _notes.Add(note);
+                    AddNote(note);
                     SelectedNote = _notes.Last();
                 }));
             }
@@ -133,10 +133,30 @@ namespace Notes.ViewModel
             _databaseController = new DatabaseController();
             _databaseController.SendMessage += SetMessage;
 
-            //_writeReadController = new WriteReadController();
             _sortController = new SortController();
             _findController = new FindController();
-            _notes = new ObservableCollection<Note_Model>(_databaseController.GetNotes());
+            _notes = new ObservableCollection<Note_Model>();
+            LoadNotes();
+        }
+
+        private void LoadNotes()
+        {
+            foreach (var item in _databaseController.GetNotes())
+            {
+                AddNote(item);
+            }
+        }
+
+        public void AddNote(Note_Model note)
+        {
+            note.NoteChanged += this.Note_NoteChanged;
+            _notes.Add(note);
+        }
+
+        private void Note_NoteChanged(Note_Model note)
+        {
+            _databaseController.InsertDataToDB(_notes.ToList());
+            _databaseController.UpdateNote(note);
         }
 
         private void SetMessage(string msg) => Message = msg;
