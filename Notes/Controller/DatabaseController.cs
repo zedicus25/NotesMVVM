@@ -23,20 +23,39 @@ namespace Notes.Controller
         }
 
        
+        public void RemoveNote(Note_Model note)
+        {
+            using (SqlCommand command = new SqlCommand($"DELETE FROM [Notes] WHERE  [id] = {note.Id};", SqlConnectionSingleton.GetInstance()))
+            {
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    SendMessage?.Invoke("Removed");
+                    _countFromDb--;
+                }
+                    
+                else
+                    SendMessage?.Invoke("not removed");
+            }
+        }
+
         public void UpdateNote(Note_Model note)
         {
+            if (note == null)
+                return;
             using (SqlCommand command = new SqlCommand($"UPDATE [Notes] SET [title]='{note.Name}',[description]='{note.Note}' WHERE  [id] = {note.Id};", SqlConnectionSingleton.GetInstance()))
             {
                 if (command.ExecuteNonQuery() > 0)
-                    SendMessage?.Invoke("Added");
+                    SendMessage?.Invoke("Updated");
                 else
-                    SendMessage?.Invoke("not added");
+                    SendMessage?.Invoke("not updated");
             }
         }
 
         public void InsertDataToDB(List<Note_Model> notes)
         {
-            notes.RemoveRange(0, _countFromDb);
+            if (_countFromDb != 0)
+                notes.RemoveRange(0, _countFromDb);
+
             foreach (var item in notes)
             {
                 Insert(item.Name, item.CreationDate, item.Note);

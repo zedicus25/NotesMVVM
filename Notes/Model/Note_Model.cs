@@ -16,7 +16,7 @@ namespace Notes.Model
             set { 
                 _note = value;  
                 OnPropertyChanged("Note");
-                NoteChanged?.Invoke(this);
+                
             }
         }
 
@@ -26,7 +26,7 @@ namespace Notes.Model
             set { 
                 _name = value; 
                 OnPropertyChanged("Name");
-                NoteChanged?.Invoke(this);
+               
             }
         }
 
@@ -52,6 +52,7 @@ namespace Notes.Model
             _name = name;
             _note = content;
             _creationDate = DateTime.Now;
+            Id = -1;
         }
         public Note_Model(string name, string note, string dateCreation) : this(name, note)
         {

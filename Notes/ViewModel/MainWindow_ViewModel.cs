@@ -22,7 +22,11 @@ namespace Notes.ViewModel
         public Note_Model SelectedNote
         {
             get { return _selectedNote; }
-            set { _selectedNote = value; OnPropertyChanged("SelectedNote"); }
+            set 
+            {
+                _selectedNote = value; 
+                OnPropertyChanged("SelectedNote"); 
+            }
         }
 
         public string FindingText
@@ -58,7 +62,7 @@ namespace Notes.ViewModel
                 return _addCommand ?? (_addCommand = new RelayCommand(() =>
                 {
                     Note_Model note = new Note_Model("New note", String.Empty);
-                    AddNote(note);
+                    _notes.Add(note);
                     SelectedNote = _notes.Last();
                 }));
             }
@@ -75,6 +79,7 @@ namespace Notes.ViewModel
                 {
                     if(_notes.Contains(SelectedNote) && SelectedNote != null)
                     {
+                        _databaseController.RemoveNote(SelectedNote);
                         _notes.Remove(SelectedNote);
                     }
                 }));
@@ -108,12 +113,25 @@ namespace Notes.ViewModel
             }
             set { _dateSortCommand = value; }
         }
-       
+        public RelayCommand SaveCommand
+        {
+            get
+            {
+                return _saveCommand ?? (_saveCommand = new RelayCommand(() =>
+                {
+                   if (_notes.Contains(SelectedNote) && SelectedNote != null && SelectedNote.Id != -1)
+                        _databaseController.UpdateNote(SelectedNote);
+                }));
+            }
+            set { _saveCommand = value; }
+        }
+
 
         private RelayCommand _addCommand;
         private RelayCommand _removeCommand;
         private RelayCommand _alphabetSortCommand;
         private RelayCommand _dateSortCommand;
+        private RelayCommand _saveCommand;
 
         //private WriteReadController _writeReadController;
         private SortController _sortController;
@@ -143,20 +161,8 @@ namespace Notes.ViewModel
         {
             foreach (var item in _databaseController.GetNotes())
             {
-                AddNote(item);
+                _notes.Add(item);
             }
-        }
-
-        public void AddNote(Note_Model note)
-        {
-            note.NoteChanged += this.Note_NoteChanged;
-            _notes.Add(note);
-        }
-
-        private void Note_NoteChanged(Note_Model note)
-        {
-            _databaseController.InsertDataToDB(_notes.ToList());
-            _databaseController.UpdateNote(note);
         }
 
         private void SetMessage(string msg) => Message = msg;
@@ -192,10 +198,7 @@ namespace Notes.ViewModel
         {
             if (_findingText.Equals("Find your note"))
             {
-                /*var tmp = _writeReadController.ReadFromFile().ToList();
-                _notes.Clear();
-                foreach (var item in tmp)
-                    _notes.Add(item);*/
+                
             }
             else
             {
