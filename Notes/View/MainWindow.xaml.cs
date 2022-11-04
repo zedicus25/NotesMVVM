@@ -30,5 +30,6 @@ namespace Notes.View
         {
             (this.DataContext as MainWindow_ViewModel).SaveData();
         }
+
     }
 }

@@ -116,10 +116,9 @@ namespace Notes.ViewModel
         private RelayCommand _dateSortCommand;
 
         //private WriteReadController _writeReadController;
-        private DatabaseController _databaseController;
         private SortController _sortController;
         private FindController _findController;
-
+        private DatabaseController _databaseController;
         private Note_Model _selectedNote;
         private ObservableCollection<Note_Model> _notes;
         private event Action AlphabetSortEvent;
@@ -133,7 +132,7 @@ namespace Notes.ViewModel
         {
             _databaseController = new DatabaseController();
             _databaseController.SendMessage += SetMessage;
-            _databaseController.StartServer();
+
             //_writeReadController = new WriteReadController();
             _sortController = new SortController();
             _findController = new FindController();
